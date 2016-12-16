@@ -1,6 +1,8 @@
 package cache
 
 import (
+	"encoding/json"
+
 	redis "gopkg.in/redis.v5"
 )
 
@@ -16,4 +18,16 @@ func Config(addr string, poolSize int) error {
 		PoolSize: poolSize,
 	})
 	return nil
+}
+
+type Book struct {
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Pages  int    `json:"pages"`
+}
+
+func NewBookFromJSON(j string) (Book, error) {
+	var book Book
+	err := json.Unmarshal([]byte(j), &book)
+	return book, err
 }
